@@ -6,12 +6,14 @@ import (
 )
 
 func main() {
-	resultch := make(chan string, 1) // -> unuffered channel
-	resultch <- "foo"                // -> is now FULL -> IT WILL BLOCK -> BLOCK HERE
+	resultch := make(chan string) // -> unuffered channel
 
-	// this code below will never execute!!!!
-	result := <-resultch
-	fmt.Println(result)
+	go func() {
+		result := <-resultch
+		fmt.Println(result)
+	}()
+
+	resultch <- "foo"
 }
 
 func fetchResource(n int) string {
